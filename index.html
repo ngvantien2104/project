@@ -512,19 +512,19 @@ var redIcon = L.icon({
     coordinates.forEach(function(coords){
         var marker=L.marker(coords,{
             icon: blackIcon
+        }).on('mousemove',function(e){
+            console.log(e);
+            e.target.setIcon(redIcon);
+        }).on('mouseout',function(e){
+            console.log(e);
+            e.target.setIcon(blackIcon);
         });
         markers.push(marker);
     });
   
 
 
-    var featureGroup = L.featureGroup(markers).on('mousemove',function(e){
-            console.log(e);
-            e.layer.setIcon(redIcon);
-        }).on('mouseout',function(e){
-            console.log(e);
-            e.layer.setIcon(blackIcon);
-        }).addTo(map);
+    var featureGroup = L.featureGroup(markers).addTo(map);
 
 //     var addGeoJSON = L.geoJSON(geojson, {
 //         style: function(feature) {
