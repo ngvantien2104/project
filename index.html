@@ -488,25 +488,37 @@
     }
   ]
 };
-var myIcon = L.icon({
-    iconUrl: 'icontien.png',
+var blackIcon = L.icon({
+    iconUrl: 'iconblack.svg',
     iconSize: [20, 20],
-    iconAnchor: [40, 20],
-    popupAnchor: [-3, -76],
+    iconAnchor: [10, 20],
+    popupAnchor: [-1, -50],
 
 });
-    var marker1 = L.marker([16.12803544825549,109.30848020217667],{
-        icon: myIcon
-    });
-    var marker2 = L.marker([17.12803544825549,109.30848020217667],{
-        icon: myIcon
-    });
-    var marker3 = L.marker([18.12803544825549,108.30848020217667],{
-        icon: myIcon
-    });
+var redIcon = L.icon({
+    iconUrl: 'iconred.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 20],
+    popupAnchor: [-1, -50],
 
-    //group các biến lại để dễ xữ lí
-    var featureGroup = L.featureGroup([marker1,marker2,marker3]).addTo(map);
+});
+
+    var markers = [];
+    var coordinates = [ 
+    [16.12803544825549,109.30848020217667],
+    [17.12803544825549,109.30848020217667],
+    [18.12803544825549,108.30848020217667]
+    ];
+    coordinates.forEach(function(coords){
+        var marker=L.marker(coords,{
+            icon: blackIcon
+        });
+        markers.push(marker);
+    });
+  
+
+
+    var featureGroup = L.featureGroup(markers).addTo(map);
 
 //     var addGeoJSON = L.geoJSON(geojson, {
 //         style: function(feature) {
