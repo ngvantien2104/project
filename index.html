@@ -47,10 +47,10 @@
 
 
 	function onMapClick(e) {
-        map.setView([16.075136, 108.163878], 10);
+       
 		popup
 			.setLatLng(e.latlng)
-			.setContent('You clicked the map at ' + e.latlng.toString())
+			.setContent('chỉ số bụi trung bình tại đây là ' + e.latlng.lat.toString() +","+ e.latlng.lng.toString())
 			.openOn(map);
 	}
 
