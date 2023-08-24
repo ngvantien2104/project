@@ -502,9 +502,16 @@ var myIcon = L.icon({
                 weight: 0.5
             }
         },
+        // setup icon trong geojson
         pointToLayer: function(geojsonPoint, latlng){
-             return L.marker(latlng,{icon: myIcon});
-             
+            return L.marker(latlng,{icon: myIcon});
+            
+        },
+        // bật popup hiển thị  location bằng cách truy suất tới dữ liệu trong file geojson
+        onEachFeature: function(feature, layer){
+            if(feature.geometry.type==='Point'){
+                layer.bindPopup(feature.geometry.coordinates.join(","))
+            }
         }
     }).addTo(map);
 </script>
