@@ -488,12 +488,23 @@
     }
   ]
 };
+var myIcon = L.icon({
+    iconUrl: 'icontien.png',
+    iconSize: [20, 20],
+    iconAnchor: [40, 20],
+    popupAnchor: [-3, -76],
 
+});
     L.geoJSON(geojson, {
         style: function(feature) {
             return {
-                color: '#000'
+                color: '#000',
+                weight: 0.5
             }
+        },
+        pointToLayer: function(geojsonPoint, latlng){
+             return L.marker(latlng,{icon: myIcon});
+             
         }
     }).addTo(map);
 </script>
