@@ -33,6 +33,7 @@
 
 <div id="map" style="width: 600px; height: 400px;"></div>
 <input type="text" id="current_center"/>
+<button id="toggleLayer">Toggle</button>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
 <script>
@@ -550,6 +551,14 @@ var redIcon = L.icon({
     console.log(map.getCenter())
     $('#current_center').val(map.getCenter().lat+','+ map.getCenter().lng)
 
+  })
+
+  $(document).on('click','#toggleLayer',function(){
+    if(map.hasLayer(featureGroup)){
+      map.removeLayer(featureGroup);
+    }else{
+      featureGroup.addTo(map);
+    }
   })
     var featureGroup = L.featureGroup(markers).addTo(map);
 
