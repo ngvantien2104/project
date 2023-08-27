@@ -27,7 +27,7 @@
 			max-width: 100%;
 			max-height: 100%;
 		}
-    #overlay{
+    #overlay {
     position: absolute;
     right: 20px;
     z-index: 1000;
@@ -38,18 +38,38 @@
     box-shadow: 1px 1px 1px grey;
     min-width: 200px;
     }
+    #slide-in{
+    padding: 10px;
+    position: absolute;
+    width: 250px;
+    z-index: 1000;
+    background: white;
+    margin-left: 2px;
+    transition: 1.5s;
+    }
+    #slide-in.in{
+    position: absolute;
+    width: 250px;
+    z-index: 1000;
+    background: white;
+
     
+    margin-left: -250px;
+    }
 	</style>
 
 	
 </head>
 <body>
-
+<div id="slide-in">
+  <h2>More Information</h2>
+</div>
 
 <div id="overlay">
   <h2>Map Option</h2>
   <input type="text" id="current_center"/>
   <button id="toggleLayer">Toggle</button>
+  <button id="advanced">advanced toggle</button>
 </div>
 <div id="mapid" style="width: 100%"></div>
 
@@ -64,6 +84,15 @@
 
   }).setView([16.075136, 108.163878], 13);
   $('#mapid').height(window.innerHeight);
+  $('#slide-in').height(window.innerHeight);
+  $(document).on('click','#advanced',function(){
+    if($('#slide-in').hasClass('in')){
+      $('#slide-in').removeClass('in')
+    }else{
+      $('#slide-in').addClass('in')
+    };
+      console.log(function(e){});
+  })
 	var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -71,21 +100,21 @@
 
 
 
-   
-var blackIcon = L.icon({
-    iconUrl: 'iconblack.svg',
-    iconSize: [20, 20],
-    iconAnchor: [10, 20],
-    popupAnchor: [-1, -50],
+  
+    var blackIcon = L.icon({
+        iconUrl: 'iconblack.svg',
+        iconSize: [20, 20],
+        iconAnchor: [10, 20],
+        popupAnchor: [-1, -50],
 
-});
-var redIcon = L.icon({
-    iconUrl: 'iconred.svg',
-    iconSize: [20, 20],
-    iconAnchor: [10, 20],
-    popupAnchor: [-1, -50],
+    });
+    var redIcon = L.icon({
+        iconUrl: 'iconred.svg',
+        iconSize: [20, 20],
+        iconAnchor: [10, 20],
+        popupAnchor: [-1, -50],
 
-});
+    });
 
     var markers = [];
     var coordinates = [ 
@@ -107,7 +136,7 @@ var redIcon = L.icon({
     });
   
 
-    	
+
     var popup=L.popup();
 
 
@@ -153,6 +182,7 @@ var redIcon = L.icon({
       featureGroup.addTo(map);
     }
   })
+
     var featureGroup = L.featureGroup(markers).addTo(map);
 
 //     var addGeoJSON = L.geoJSON(geojson, {
