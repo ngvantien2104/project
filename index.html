@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+  
 	<title>Air quality</title>
 	
 	<link rel="shortcut icon" type="image/x-icon" href="headIcon.png" />
@@ -43,9 +43,10 @@
     position: absolute;
     width: 250px;
     z-index: 1000;
-    background: white;
+    background: rgba(745, 346, 176, 0.57);; 
     margin-left: 2px;
     transition: 1.5s;
+    
     }
     #slide-in.in{
     position: absolute;
@@ -67,8 +68,9 @@
 
 <div id="overlay">
   <h2>Chức Năng</h2>
-  <input type="text" id="current_center"/>
-  <button id="toggleLayer">tìm tiếm</button>
+  <div id="current_center"></div>
+  <h5>Search filter</h5>
+  <input id="search">
   <button id="advanced">Thông tin</button>
 </div>
 <div id="mapid" style="width: 100%"></div>
@@ -76,7 +78,8 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
-
+<script src="leaflet-heat.js"></script>
+<script src=""></script>
 
 <script>
 
@@ -84,7 +87,7 @@
 	var map = L.map('mapid',{
     zoomControl: false
 
-  }).setView([16.075136, 108.163878], 1);
+  }).setView([16.075136, 108.163878], 8);
   $('#mapid').height(window.innerHeight);
   $('#slide-in').height(window.innerHeight);
   $(document).on('click','#advanced',function(){
@@ -103,44 +106,117 @@
 
 
   var contriesGeoJSON =false;
-  fetch('/vn2.json',{
+  fetch('/vn3.json',{
     method: 'GET'
   })
   .then(response => response.json())
   .then(json => {
-    var geoJSON = L.geoJSON(json,{
+    var vngeoJSON = L.geoJSON(json,{
       style : function(feature) {
         return {
           fillOpacity: 0
         };
+      },
+      
+      onEachFeature: function(feature,layer,){
+        layer.on('mouseover',function(){
+          layer.setStyle({fillOpacity: 1})
+        })
+        layer.on('mouseout',function(){
+          layer.setStyle({fillOpacity: 0})
+        })
       }
     }).addTo(map);
   })
   .catch(error => console.log(error.message));
-  var earthquakesGeoJSON =false;
-  fetch('/quakes.geojson',{
-    method: 'GET'
-  })
-  .then(response => response.json())
-  .then(json => {
-    var geoJSON = L.geoJSON(json,{
-      style : function(feature) {
-        return {
-          fillOpacity: 0.3,
-          fillColor:'#000',
-          color: '#000',
-          opacity: 0.3
-        };
-      },
-      // setup icon trong geojson
-        pointToLayer: function(geojsonPoint, latlng){
-            return L.circle(latlng,100000*(geojsonPoint.properties.mag));
+    //   var heatMapPoint = [];
+    
+    // json.features.forEach(function(feature){
+    //   heatMapPoint.push([feature.geometry.coordinates[0],feature.geometry.coordinates[1],feature.properties.mag])
+    // });
+    // var heat = L.heatLayer([heatMapPoint], {radius: 25}).addTo(map);
+    var heat = L.heatLayer([
+	[16.3, 108.456, 12], // lat, lng, intensity
+	[16.07, 108.547, 63],
+  [16.6, 108.468, 23], // lat, lng, intensity
+	[16.876, 108.5345, 64],
+  [16.345, 108.4456, 63], // lat, lng, intensity
+	[16.8745, 108.53647, 56],
+  [16.57, 108.4967, 3], // lat, lng, intensity
+	[16.06, 108.73, 856],
+  [16.345, 108.576, 465], // lat, lng, intensity
+	[16.047, 108.756, 345],
+  [16.3, 108.078, 346], // lat, lng, intensity
+	[16.978, 108.74, 67],
+  [16.58, 108.56, 75], // lat, lng, intensity
+	[16.456, 108.867, 687],
+  [16.78, 108.567, 345], // lat, lng, intensity
+	[16.967, 108.345, 63],
+  [16.06, 108.5956, 37], // lat, lng, intensity
+	[16.856, 108.95,4 ],
+  [16.567, 108.59567, 345], // lat, lng, intensity
+	[16.8678, 108.456, 345],
+  [16.5789, 108.345, 567], // lat, lng, intensity
+	[16.860, 108.678, 4],
+  [16.05, 108.346, 345], // lat, lng, intensity
+	[16.054, 108.345, 35],
+  [16.576, 108.72, 57], // lat, lng, intensity
+	[16.6, 108.967, 347],
+  [16.95, 108.745, 456], // lat, lng, intensity
+	[16.05, 108.678, 4],
+  [16.789, 108.234, 3], // lat, lng, intensity
+	[16.8, 108.456, 34],
+  [16.7456, 108.234, 47], // lat, lng, intensity
+	[16.679, 108.96, 35],
+  [16.780, 108.456, 45], // lat, lng, intensity
+	[16.695, 108.568, 34],
+  [16.95, 108.856, 1], // lat, lng, intensity
+	[16., 108.978, 3445],
+  [16.07, 108.564, 456], // lat, lng, intensity
+	[16.5, 108.345, 34],
+  [16.475, 108.576, 85], // lat, lng, intensity
+	[16.5, 108.96, 33],
+  [16.067, 108.235, 856], // lat, lng, intensity
+	[16.5, 108.345, 3],
+  [16.0465, 108.23345, 234], // lat, lng, intensity
+	[16.567, 108.867, 63],
+  [16.06, 108.25, 856], // lat, lng, intensity
+	[16.95, 108.8345, 47],
+  [16.890, 108.8367, 345], // lat, lng, intensity
+	[16.567, 108.3, 456],
+  [16.6, 108.34, 95], // lat, lng, intensity
+	[16.64, 108.45, 354],
+  [16.47, 108.768, 56], // lat, lng, intensity
+	[16.63, 108.234, 6],
+  [16.60, 108.784, 6], // lat, lng, intensity
+	[16.678, 108.63, 84],
+  
+], {radius: 40}).addTo(map);
+  // var earthquakesGeoJSON =false;
+  // fetch('/quakes.geojson',{
+  //   method: 'GET'
+  // })
+  // .then(response => response.json())
+  // .then(json => {
+  //   var earthquakesGeoJSON = L.geoJSON(json,{
+  //     style : function(feature) {
+  //       return {
+  //         fillOpacity: 0.3,
+  //         fillColor:'#000',
+  //         color: '#000',
+  //         opacity: 0.3
+  //       };
+  //     },
+  //     // setup icon trong geojson
+  //       // pointToLayer: function(geojsonPoint, latlng){
+  //       //     return L.circle(latlng,100000*(geojsonPoint.properties.mag));
             
-        },
-    }).addTo(map);
-  })
-  .catch(error => console.log(error.message));
-    // var blackIcon = L.icon({
+  //       // },
+  //   }).addTo(map);
+  // })
+  // .catch(error => console.log(error.message));
+
+ //   // var blackIcon = L.icon({
     //     iconUrl: 'iconblack.svg',
     //     iconSize: [20, 20],
     //     iconAnchor: [10, 20],
@@ -211,17 +287,18 @@
   // })
   map.on('moveend',function(e){
     console.log(map.getCenter())
-    $('#current_center').val(map.getCenter().lat+','+ map.getCenter().lng)
+    $('#current_center').html(map.getCenter().lat+','+ map.getCenter().lng)
 
   })
 
-  $(document).on('click','#toggleLayer',function(){
-    if(map.hasLayer(featureGroup)){
-      map.removeLayer(featureGroup);
-    }else{
-      featureGroup.addTo(map);
-    }
-  })
+  // $(document).on('click','#toggleLayer',function(){
+  //   if(map.hasLayer(featureGroup)){
+  //     map.removeLayer(featureGroup);
+  //   }else{
+  //     featureGroup.addTo(map);
+  //   }
+  // })
+
 
     // var featureGroup = L.featureGroup(markers).addTo(map);
 
@@ -229,7 +306,7 @@
 //         style: function(feature) {
 //             return {
 //                 color: '#000',
-//                 weight: 0.5
+//                 weight: 
 //             }
 //         },
 //         // setup icon trong geojson
