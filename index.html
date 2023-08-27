@@ -76,6 +76,8 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+
 <script>
 
 
@@ -93,14 +95,28 @@
     };
       console.log(function(e){});
   })
+  
 	var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
 
-
-  
+  var contriesGeoJSON =false;
+  fetch('/vn2.json',{
+    method: 'GET'
+  })
+  .then(response => response.json())
+  .then(json => {
+    var geoJSON = L.geoJSON(json,{
+      style : function(feature) {
+        return {
+          fillOpacity: 0
+        };
+      }
+    }).addTo(map);
+  })
+  .catch(error => console.log(error.message));
     var blackIcon = L.icon({
         iconUrl: 'iconblack.svg',
         iconSize: [20, 20],
@@ -116,59 +132,60 @@
 
     });
 
-    var markers = [];
-    var coordinates = [ 
-    [16.12803544825549,109.30848020217667],
-    [17.12803544825549,109.30848020217667],
-    [18.12803544825549,108.30848020217667]
-    ];
-    coordinates.forEach(function(coords){
-        var marker=L.marker(coords,{
-            icon: blackIcon
-        }).on('mousemove',function(e){
-            console.log(e);
-            e.target.setIcon(redIcon);
-        }).on('mouseout',function(e){
-            console.log(e);
-            e.target.setIcon(blackIcon);
-        });
-        markers.push(marker);
-    });
+  //   var markers = [];
+  //   var coordinates = [ 
+  //   [16.12803544825549,109.30848020217667],
+  //   [17.12803544825549,109.30848020217667],
+  //   [18.12803544825549,108.30848020217667]
+  //   ];
+  //   coordinates.forEach(function(coords){
+  //       var marker=L.marker(coords,{
+  //           icon: blackIcon
+  //       }).on('mousemove',function(e){
+  //           console.log(e);
+  //           e.target.setIcon(redIcon);
+  //       }).on('mouseout',function(e){
+  //           console.log(e);
+  //           e.target.setIcon(blackIcon);
+  //       });
+  //       markers.push(marker);
+  //   });
   
 
-
-    var popup=L.popup();
-
-
-	function onMapClick(e) {
     
-		popup
-			.setLatLng(e.latlng)
-			.setContent('chỉ số bụi trung bình tại đây là ' + e.latlng.lat.toString() +","+ e.latlng.lng.toString())
-			.openOn(map);
-	}
+    
+  //   var popup=L.popup();
 
-	map.on('click', onMapClick);
 
-  var options = {units: 'kilometers'};
+	// function onMapClick(e) {
+    
+	// 	popup
+	// 		.setLatLng(e.latlng)
+	// 		.setContent('chỉ số bụi trung bình tại đây là ' + e.latlng.lat.toString() +","+ e.latlng.lng.toString())
+	// 		.openOn(map);
+	// }
 
-  map.on('mousemove',function(e){
-    console.log(e);
-    var from = turf.point([e.latlng.lat, e.latlng.lng]);
-    markers.forEach(function(marker){
+	// map.on('click', onMapClick);
 
-      var to = turf.point([marker.getLatLng().lat,marker.getLatLng().lng]);
-      var distance = turf.distance(from, to, options);
-      if(distance<50){
-        marker.setIcon(redIcon);
-      }
-      else{
-        marker.setIcon(blackIcon);
-      }
-    });
+  // var options = {units: 'kilometers'};
+
+  // map.on('mousemove',function(e){
+  //   console.log(e);
+  //   var from = turf.point([e.latlng.lat, e.latlng.lng]);
+  //   markers.forEach(function(marker){
+
+  //     var to = turf.point([marker.getLatLng().lat,marker.getLatLng().lng]);
+  //     var distance = turf.distance(from, to, options);
+  //     if(distance<50){
+  //       marker.setIcon(redIcon);
+  //     }
+  //     else{
+  //       marker.setIcon(blackIcon);
+  //     }
+  //   });
     
   
-  })
+  // })
   map.on('moveend',function(e){
     console.log(map.getCenter())
     $('#current_center').val(map.getCenter().lat+','+ map.getCenter().lng)
@@ -183,7 +200,7 @@
     }
   })
 
-    var featureGroup = L.featureGroup(markers).addTo(map);
+    // var featureGroup = L.featureGroup(markers).addTo(map);
 
 //     var addGeoJSON = L.geoJSON(geojson, {
 //         style: function(feature) {
@@ -206,9 +223,11 @@
 //     }).addTo(map);
 
 
-    map.fitBounds(featureGroup.getBounds(), {
-        padding: [20,20]
-    });
+    // map.fitBounds(featureGroup.getBounds(), {
+    //     padding: [20,20]
+    // });
+
+
 </script>
 
 
