@@ -7,7 +7,7 @@
 	
 	<title>Air quality</title>
 	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="headIcon.png" />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -62,14 +62,14 @@
 </head>
 <body>
 <div id="slide-in">
-  <h2>More Information</h2>
+  <h2>Thêm Thông Tin</h2>
 </div>
 
 <div id="overlay">
-  <h2>Map Option</h2>
+  <h2>Chức Năng</h2>
   <input type="text" id="current_center"/>
-  <button id="toggleLayer">Toggle</button>
-  <button id="advanced">advanced toggle</button>
+  <button id="toggleLayer">tìm tiếm</button>
+  <button id="advanced">Thông tin</button>
 </div>
 <div id="mapid" style="width: 100%"></div>
 
@@ -84,7 +84,7 @@
 	var map = L.map('mapid',{
     zoomControl: false
 
-  }).setView([16.075136, 108.163878], 13);
+  }).setView([16.075136, 108.163878], 1);
   $('#mapid').height(window.innerHeight);
   $('#slide-in').height(window.innerHeight);
   $(document).on('click','#advanced',function(){
@@ -114,6 +114,29 @@
           fillOpacity: 0
         };
       }
+    }).addTo(map);
+  })
+  .catch(error => console.log(error.message));
+  var earthquakesGeoJSON =false;
+  fetch('/quakes.geojson',{
+    method: 'GET'
+  })
+  .then(response => response.json())
+  .then(json => {
+    var geoJSON = L.geoJSON(json,{
+      style : function(feature) {
+        return {
+          fillOpacity: 0.3,
+          fillColor:'#000',
+          color: '#000',
+          opacity: 0.3
+        };
+      },
+      // setup icon trong geojson
+        pointToLayer: function(geojsonPoint, latlng){
+            return L.circle(latlng,100000*(geojsonPoint.properties.mag));
+            
+        },
     }).addTo(map);
   })
   .catch(error => console.log(error.message));
